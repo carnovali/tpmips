@@ -1,13 +1,13 @@
 ##################################################################################################################
-##								##
-## - TRABAJO FINAL ARQUITECTURA DE LAS COMPUTADORAS I - ##########################################################
-## - Listas Enlazadas		            - ##########################################################
-## - Lucas Carnovali                             2024 - ##########################################################
-##								##
-## ** Por un error en algun momento, el primer nodo agregado a una lista en lugar de tener su puntero al	##
-##    siguiente apuntandose a si mismo, lo tiene inicializado en NULL. Esto cambia el comportamiento de algunas ## 
-##    de las funciones **							##
-##								##
+##								
+## - TRABAJO FINAL ARQUITECTURA DE LAS COMPUTADORAS I 	- ########################################################
+## - Listas Enlazadas			       		- ########################################################
+## - Lucas Carnovali               	           2024 - ########################################################
+##								
+## ** Por un error en algun momento, el primer nodo agregado a una lista en lugar de tener su puntero al	
+##    siguiente apuntandose a si mismo, lo tiene inicializado en NULL. Esto cambia el comportamiento de algunas 
+##    de las funciones **							
+##								
 ##################################################################################################################
 
 .data
@@ -159,7 +159,7 @@ addNodeToEnd:
 addNodeEmptyList: 
 	sw	$v0, 0($a0)				# *nodo-inicial = &nodo-nuevo
 	sw	$v0, 0($v0)				# *nodo.anterior = &nodo-nuevo
-	sw	$zero, 12($v0)			# *nodo.siguiente = NULL
+	sw	$zero, 12($v0)				# *nodo.siguiente = NULL
 addNodeExit:
 	lw	$ra, 8($sp)
 	addi	$sp, $sp, 8
@@ -195,10 +195,10 @@ again:
 	sw	$t0, ($a1) 				# guarda el nodo como inicio de la lista 
 	
 	# chequear si existen solo 2 nodos en la lista
-	beq	$t3, $a0, delNode2Elements			# nodo-siguiente.siguiente == nodo ?
+	beq	$t3, $a0, delNode2Elements		# nodo-siguiente.siguiente == nodo ?
 	j	delNodeExit
 delNode2Elements:
-	sw	$zero, 12($t1)			# pone en NULL nodo-anterior.siguiente
+	sw	$zero, 12($t1)				# pone en NULL nodo-anterior.siguiente
 	j	delNodeExit
 delNodePointSelf:
 	sw	$zero, ($a1)				# &lista = NULL
@@ -220,7 +220,7 @@ getBlock:
 	# imprime el mensaje
 	li	$v0, 4
 	syscall
-	jal	smalloc				# asignar memoria para el nombre
+	jal	smalloc					# asignar memoria para el nombre
 	
 	move	$a0, $v0				# $a0 = direccion de memoria nueva
 	li	$a1, 16 				# maxima cant de caracteres
@@ -305,7 +305,7 @@ newCategory:
 	
 	# agregar el nodo con el nuevo nombre a la lista
 	la	$a0, cclist				# $a0 = &lista
-	li	$a1, 0 				# $a1 = NULL
+	li	$a1, 0 					# $a1 = NULL
 	move	$a2, $v0 				# $a2 = &nombre
 	jal	addNode
 	
@@ -321,7 +321,7 @@ newCategory:
 	lw	$a0, 8($s0)
 	jal	printMsg
 newCategoryEnd:
-	li	$v0, 0 				# return success
+	li	$v0, 0 					# return success
 	lw	$s0, 4($sp)
 	lw	$ra, 8($sp)
 	addiu	$sp, $sp, 8
@@ -424,7 +424,7 @@ listCategoriesLoop:
 	# avanza a la proxima categoria y chequea que exista
 	lw	$s1, 12($s1)				# actualiza nodo-actual a nodo-actual.siguiente
 	beqz	$s1, listCategoriesEnd			# nodo-sigiente == NULL ?
-	beq	$s0, $s1, listCategoriesEnd			# categoria-inicial == nodo-siguiente ?
+	beq	$s0, $s1, listCategoriesEnd		# categoria-inicial == nodo-siguiente ?
 	
 	j	listCategoriesLoop
 listCategoriesError:
@@ -543,7 +543,7 @@ newObject:
 	la	$a0, 4($t0)				# $a0 = &primer-objeto
 	jal	getObjectId
 	move	$a1, $v0				# $a1 = id del nuevo nodo
-	jal	addNode				# agrega el nodo
+	jal	addNode					# agrega el nodo
 	j	newObjectSuccess
 newObjectError:
 	jal	printError
@@ -569,7 +569,7 @@ getObjectId:
 	# carga el primer elemento de la lista y comprueba que exista (301)
 	lw	$s0, wclist				# $s0 = &objeto-inicial
 	beqz 	$s0, getObjectIdError
-	li	$s2, 0				# id inicial
+	li	$s2, 0					# id inicial
 	lw	$s0, 4($s0)				# carga el primer objeto de esa categoria
 	beqz	$s0, getObjectIdEnd
 	
@@ -580,7 +580,7 @@ getObjectIdLoop:
 	lw	$s2, 4($s1)				# $s2 = id objeto actual
 	lw	$s1, 12($s1)				# avanza objeto-actual a objeto-actual.siguiente
 	beqz 	$s1, getObjectIdEnd			# objeto-siguiente == NULL ?
-	beq	$s0, $s1, getObjectIdEnd			# objeto-inicial == objeto-siguiente ?
+	beq	$s0, $s1, getObjectIdEnd		# objeto-inicial == objeto-siguiente ?
 
 	j	getObjectIdLoop
 getObjectIdError:
@@ -634,7 +634,7 @@ listObjectsLoop:
 	# mover al siguiente nodo y siempre que nodo.siguiente (!= NULL && != nodo inicial)
 	lw	$s1, 12($s1)				# avanza el nodo actual a nodo.siguiente
 	beqz	$s1, listObjectsEnd			# nodo-siguiente == NULL ?
-	beq	$s0, $s1, listObjectsEnd			# primer-objeto == nodo-siguiente ?
+	beq	$s0, $s1, listObjectsEnd		# primer-objeto == nodo-siguiente ?
 	
 	j	listObjectsLoop
 listObjectError:
@@ -680,9 +680,9 @@ delObject:
 # recorre toda la lista hasta encontrar un objeto cuyo id == id ingresado
 delObjectLoop:
 	lw	$t4, 4($t1)				# $t4 = objeto-actual.id
-	beq	$t4, $t0, delObjectFound			# objeto-actual.id == opcion ingresada ?
+	beq	$t4, $t0, delObjectFound		# objeto-actual.id == opcion ingresada ?
 	lw	$t1, 12($t1)				# avanzo objeto-actual a objeto-actual.siguiente
-	beq	$t1, $t2, delObjectNotFound			# objeto-siguiente == primer-objeto ?
+	beq	$t1, $t2, delObjectNotFound		# objeto-siguiente == primer-objeto ?
 	
 	j	delObjectLoop
 
@@ -696,7 +696,7 @@ delObjectNotFound:
 delObjectFound:
 	move	$a0, $t1				# $a0 = &objeto-actual
 	move	$a1, $t3				# $a1 = &lista-objetos
-	jal 	delNode				# elimina el nodo
+	jal 	delNode					# elimina el nodo
 delObjectSuccess:
 	la	$a0, success
 	jal	printMsg
